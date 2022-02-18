@@ -4,7 +4,7 @@
       <nav class="navbar navbar-light">
       <div class="container">
         <!-- <a class="" href="index.html"></a> -->
-        <nuxt-link class="navbar-brand" to="/">conduit</nuxt-link>
+        <nuxt-link class="navbar-brand" to="/">bruce's sky</nuxt-link>
         <ul class="nav navbar-nav pull-xs-right">
           <template v-if="user">
             <li class="nav-item">
@@ -46,7 +46,7 @@
 	<!-- 底部 -->
 	<footer>
     <div class="container">
-      <a href="/" class="logo-font">conduit</a>
+      <a href="/" class="logo-font">bruce's sky</a>
       <span class="attribution">
         An interactive learning project from <a href="https://thinkster.io">Thinkster</a>. Code & design licensed under MIT.
       </span>
