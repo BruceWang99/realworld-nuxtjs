@@ -62,7 +62,8 @@ jobs:
          scp: |
            './release.tgz' => /Users/wang/projects/realworld-nuxtjs
          last_ssh: |
+            . /home/ubuntu/.bashrc
             cd /Users/wang/projects/realworld-nuxtjs
             tar -xzvf release.tgz
-            /home/ubuntu/.nvm/versions/node/v14.18.2/bin/npm install --production
-            /home/ubuntu/.nvm/versions/node/v14.18.2/lib/node_modules/pm2/bin/pm2 reload pm2.config.json
+            npm install --production
+            pm2 reload pm2.config.json
