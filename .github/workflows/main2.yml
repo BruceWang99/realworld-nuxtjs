@@ -63,7 +63,6 @@ jobs:
            './release.tgz' => /Users/wang/projects/realworld-nuxtjs
          last_ssh: |
             cd /Users/wang/projects/realworld-nuxtjs
-            ls -a
             tar -xzvf release.tgz
-            npm install --production
-            pm2 reload pm2.config.json
+            /home/ubuntu/.nvm/versions/node/v14.18.2/bin/npm install --production
+            /home/ubuntu/.nvm/versions/node/v14.18.2/lib/node_modules/pm2/bin/pm2 reload pm2.config.json
