@@ -62,7 +62,7 @@ jobs:
          scp: |
            './release.tgz' => /Users/wang/projects/realworld-nuxtjs
          last_ssh: |
-            cd /Users/wang/projects/realworld-nuxtjs # 切换到部署目录
-            tar -xzvf release.tgz  # 将 tgz文件进行解压到当前部署目录
+            cd /Users/wang/projects/realworld-nuxtjs
+            tar -xzvf release.tgz
             npm install --production
             pm2 reload pm2.config.json
