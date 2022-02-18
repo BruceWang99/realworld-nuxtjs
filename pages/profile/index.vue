@@ -4,20 +4,20 @@
   <div class="user-info">
     <div class="container">
       <div class="row">
-
         <div class="col-md-10 col-md-offset-1">
-          <img src="http://i.imgur.com/Qr71crq.jpg" class="user-img" />
-          <h4>Eric Simons</h4>
+          <img :src="profile.image" class="user-img" />
+          <h4>{{profile.username}}</h4>
           <p>
-            Cofounder @GoThinkster, lived in Aol's HQ for a few months, kinda looks like Peeta from the Hunger Games
+            {{profile.bio}}
           </p>
-          <button class="btn btn-sm btn-outline-secondary action-btn">
-            <i class="ion-plus-round"></i>
-            &nbsp;
-            Follow Eric Simons <span class="counter">(10)</span>
-          </button>
+          <nuxt-link :to="{ name: 'settings' }">
+               <button class="btn btn-sm btn-outline-secondary action-btn">
+                <i class="ion-gear-a"></i>
+                &nbsp;
+                Edit Profile Settings
+              </button>
+          </nuxt-link>
         </div>
-
       </div>
     </div>
   </div>
@@ -28,52 +28,98 @@
       <div class="col-md-10 col-md-offset-1">
         <div class="posts-toggle">
           <ul class="nav nav-pills outline-active">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">My Posts</a>
+            <li class="nav-item" @click="articleType = 0">
+              <a class="nav-link" 
+              :class="{
+                active: articleType === 0
+              }"
+              href="javascript:;">My Posts</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Favorited Posts</a>
+            <li class="nav-item" @click="articleType = 1">
+              <a class="nav-link"
+              :class="{
+                active: articleType === 1
+              }"
+               href="javascript:;">Favorited Posts</a>
             </li>
           </ul>
         </div>
-
-        <div class="post-preview">
-          <div class="post-meta">
-            <a href="profile.html"><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
-            <div class="info">
-              <a href="profile.html" class="author">Eric Simons</a>
-              <span class="date">January 20th</span>
+        <div v-show="articleType === 0">
+          <div class="post-preview" v-for="article in myArticles" :key="article.slug">
+            <div class="post-meta">
+              <nuxt-link :to="{
+                name: 'profile',
+                params: {
+                  username: article.author.username
+                }
+              }">
+                <img :src="article.author.image" />
+              </nuxt-link>
+              <div class="info">
+                <nuxt-link class="author" :to="{
+                  name: 'profile',
+                  params: {
+                    username: article.author.username
+                  }
+                }">
+                {{article.author.username}}
+                </nuxt-link>
+                 <span class="date">{{article.author.createdAt | date('YYYY-MM-DD hh:mm:ss')}}</span>
+              </div>
+              <!-- <button class="btn btn-outline-primary btn-sm pull-xs-right">
+                <i class="ion-heart"></i> {{article.favoritesCount}}
+              </button> -->
             </div>
-            <button class="btn btn-outline-primary btn-sm pull-xs-right">
-              <i class="ion-heart"></i> 29
-            </button>
-          </div>
-          <a href="post.html" class="preview-link">
-            <h1>How to build webapps that scale</h1>
-            <p>In my demo, the holy grail layout is nested inside a document, so there's no body or main tags like shown above. Regardless, we're interested in the class names and the appearance of sections in the markup as opposed to the actual elements themselves. In particular, take note of the modifier classes used on the two sidebars, and the trivial order in which they appear in the markup. Let's break this down to paint a clear picture of what's happening...</p>
+            <nuxt-link class="preview-link" :to="{
+              name: 'article',
+              params: {
+                slug: article.slug
+              }
+            }">
+            <h1>{{article.title}}</h1>
+            <p>{{article.description}}</p>
             <span>Read more...</span>
-          </a>
+            </nuxt-link>
+          </div>
         </div>
-
-        <div class="post-preview">
-          <div class="post-meta">
-            <a href="profile.html"><img src="http://i.imgur.com/N4VcUeJ.jpg" /></a>
-            <div class="info">
-              <a href="profile.html" class="author">Albert Pai</a>
-              <span class="date">January 20th</span>
+        <div v-show="articleType === 1">
+           <div class="post-preview" v-for="article in favoritedArticles" :key="article.slug">
+            <div class="post-meta">
+              <nuxt-link :to="{
+                name: 'profile',
+                params: {
+                  username: article.author.username
+                }
+              }">
+                <img :src="article.author.image" />
+              </nuxt-link>
+              <div class="info">
+                <nuxt-link class="author" :to="{
+                  name: 'profile',
+                  params: {
+                    username: article.author.username
+                  }
+                }">
+                {{article.author.username}}
+                </nuxt-link>
+                 <span class="date">{{article.author.createdAt | date('YYYY-MM-DD hh:mm:ss')}}</span>
+              </div>
+              <button class="btn btn-outline-primary btn-sm pull-xs-right">
+                <i class="ion-heart"></i> {{article.favoritesCount}}
+              </button>
             </div>
-            <button class="btn btn-outline-primary btn-sm pull-xs-right">
-              <i class="ion-heart"></i> 32
-            </button>
-          </div>
-          <a href="post.html" class="preview-link">
-            <h1>The song you won't ever stop singing. No matter how hard you try.</h1>
-            <p>In my demo, the holy grail layout is nested inside a document, so there's no body or main tags like shown above. Regardless, we're interested in the class names and the appearance of sections in the markup as opposed to the actual elements themselves. In particular, take note of the modifier classes used on the two sidebars, and the trivial order in which they appear in the markup. Let's break this down to paint a clear picture of what's happening...</p>
+            <nuxt-link class="preview-link" :to="{
+              name: 'article',
+              params: {
+                slug: article.slug
+              }
+            }">
+            <h1>{{article.title}}</h1>
+            <p>{{article.description}}</p>
             <span>Read more...</span>
-          </a>
+            </nuxt-link>
+          </div>
         </div>
-
-
       </div>
 
     </div>
@@ -84,13 +130,55 @@
 </template>
 
 <script>
+import { getUserProfile } from '../../api/user'
+import { getArticles } from '../../api/article'
+import { mapState } from 'vuex'
+
+async function handleArticles(type, username) {
+  const page = 1
+  const limit =  5
+  let params = {
+    limit: limit,
+    offset: (page - 1)  * limit,
+  }
+  if(type === 0) {
+    params.author = username
+  } else {
+    params.favorited = username
+  }
+  const {data} = await getArticles(params)
+  
+  // if(type === 0) {
+  //   this.myArticles = data.articles
+  // } else {
+  //   this.favoritedArticles = data.articles
+  // }
+  return data.articles
+}
+
 export default {
   name: 'UserProfile',
   middleware: 'authenticated',
   components: {},
    data() {
-	   return {}
+	   return {
+       articleType: 0
+     }
    },
+   mounted() {
+
+   },
+   async asyncData({params}){     
+      const [profileData, myArticles,favoritedArticles ] = await Promise.all([getUserProfile(params.username), handleArticles(0, params.username), handleArticles(1, params.username)])
+      const profile = profileData.data.profile
+     return {
+       profile,
+       myArticles,
+       favoritedArticles
+     }
+   },
+   methods:{
+   }
 }
 </script>
 

@@ -45,28 +45,24 @@ jobs:
         asset_name: release.tgz
         asset_content_type: application/x-tgz
 
-    # 上传代码到服务器
-    - name: upload file 🚀
-      uses: easingthemes/ssh-deploy@v2.1.5
+    # 部署到服务器
+    - name: Deploy 🚀
+      uses: cross-the-world/ssh-scp-ssh-pipelines@latest # 因为构建之后，需要把代码上传到服务器上，所以需要连接到ssh，并且做一个安全拷贝(security copy)操作
       env:
-          SSH_PRIVATE_KEY: ${{ secrets.BRUCE_SSH_KEY }} # 服务器的key
-          ARGS: '-rltgoDzvO --delete'  #(optional, default '-rltgoDzvO')
-          SOURCE: release.tgz # 这是要复制到服务器的文件夹名称
-          REMOTE_HOST: ${{ secrets.HOST }} # 你的服务器公网地址
-          REMOTE_USER: ${{ secrets.USERNAME }} # 服务器登录用户名
-          TARGET: /Users/wang/projects/realworld-nuxtjs # 放到的目标地址
-          
-    # 执行服务器上的部署命令
-    - name: Deploy
-      uses: appleboy/ssh-action@master
+          WELCOME: "ssh scp ssh pipelines"
+          LASTSSH: "Doing something after copying"
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        script: |
-          cd /Users/wang/projects/realworld-nuxtjs
-          tar zxvf release.tgz
-          npm install --production
-          pm2 reload pm2.config.json
-    
+         host: ${{ secrets.HOST }}
+         user: ${{ secrets.USERNAME }}
+         pass: ${{ secrets.PASSWORD }}
+         port: ${{ secrets.PORT }}
+         connect_timeout: 10s
+         first_ssh: |
+           
+         scp: |
+           './release.tgz' => /Users/wang/projects/realworld-nuxtjs
+         last_ssh: |
+            cd /Users/wang/projects/realworld-nuxtjs
+            tar -xzvf release.tgz
+            npm install --production
+            pm2 reload pm2.config.json

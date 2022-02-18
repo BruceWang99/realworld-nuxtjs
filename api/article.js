@@ -8,7 +8,14 @@ export const getArticles = params => {
     params
   })
 }
-
+// 创建文章
+export const createArticle = params => {
+  return request({
+    method: 'POST',
+    url: '/api/articles',
+    data: params
+  })
+}
 // 获取公共文章列表
 export const getYourFeedArticles = params => {
   return request({
