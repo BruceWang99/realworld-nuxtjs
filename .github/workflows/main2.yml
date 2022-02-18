@@ -18,7 +18,7 @@ jobs:
       uses: actions/setup-node@master
     - run: npm install
     - run: npm run build
-    - run: tar -zcvf release.tgz .nuxt static nuxt.config.js package.json package-lock.json pm2.config.json
+    - run: tar -zcvf release.tgz .nuxt static nuxt.config.js package.json pm2.config.json
 
 
     # 发布 Release
@@ -65,4 +65,4 @@ jobs:
             cd /Users/wang/projects/realworld-nuxtjs
             tar -xzvf release.tgz
             npm install --production
-            pm2 reload pm2.config.json
+            /home/ubuntu/.nvm/versions/node/v14.18.2/lib/node_modules/pm2/bin/pm2 reload pm2.config.json
