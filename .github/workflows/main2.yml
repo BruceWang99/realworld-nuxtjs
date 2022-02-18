@@ -21,7 +21,6 @@ jobs:
     - run: tar -zcvf release.tgz .nuxt static nuxt.config.js package.json package-lock.json pm2.config.json
 
 
-
     # 发布 Release
     - name: Create Release
       id: create_release
@@ -47,16 +46,23 @@ jobs:
         asset_content_type: application/x-tgz
 
     # 部署到服务器
-    - name: Deploy
-      uses: appleboy/ssh-action@master
+    - name: Deploy 🚀
+      uses: cross-the-world/ssh-scp-ssh-pipelines@latest # 因为构建之后，需要把代码上传到服务器上，所以需要连接到ssh，并且做一个安全拷贝(security copy)操作
+      env:
+          WELCOME: "ssh scp ssh pipelines"
+          LASTSSH: "Doing something after copying"
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        script: |
-          cd /Users/wang/projects/realworld-nuxtjs
-          wget https://github.com/BruceWang99/realworld-nuxtjs/releases/latest/download/release.tgz --user-agent="Mozilla/5.0 (X11;U;Linux i686;en-US;rv:1.9.0.3) Geco/2008092416 Firefox/3.0.3" --no-check-certificate -O release.tgz
-          tar zxvf release.tgz
-          npm install --production
-          pm2 reload pm2.config.json
+         host: ${{ secrets.HOST }}
+         user: ${{ secrets.USERNAME }}
+         pass: ${{ secrets.PASSWORD }}
+         port: ${{ secrets.PORT }}
+         connect_timeout: 10s
+         first_ssh: |
+           
+         scp: |
+           './release.tgz' => /Users/wang/projects/realworld-nuxtjs
+         last_ssh: |
+            cd /Users/wang/projects/realworld-nuxtjs # 切换到部署目录
+            tar -xzvf release.tgz  # 将 tgz文件进行解压到当前部署目录
+            npm install --production
+            pm2 reload pm2.config.json
